@@ -103,6 +103,7 @@ class FundService extends BaseService
         foreach ($funds as $fund) {
             $history = $this->getHistory($fund->id, '&month=1', true);
             $lastPrice = array_pop($history)->navCurrent;
+            
             $fund->current_value = $lastPrice;
             $fund->save();
         }

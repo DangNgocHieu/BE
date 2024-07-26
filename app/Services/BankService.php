@@ -12,13 +12,21 @@ use Illuminate\Support\Facades\Log;
 
 class BankService extends VendorService
 {
+    // hủy giao dịch
     const STATUS_CANCEL = -1;
+    // đang chờ thanh toán
     const STATUS_NEW = 0;
+    //dã thanh toán
     const STATUS_PAID = 1;
+    // đã mua đc quỹ bên tcinvest 
     const STATUS_BOUGHT = 2;
+    // đã bán ...
     const STATUS_SOLD = 3;
+    // 
     const STATUS_ADVANCED_MONEY = 4;
+    // đã rút
     const STATUS_WITHDRAWN = 5;
+    // lỗi giao dịch
     const STATUS_FAILURE = 6;
 
     const TYPE_BUY = 0;
@@ -329,8 +337,9 @@ class BankService extends VendorService
     public function transFundCertificate($fundCode, $amount, $matchedDate = 1, $action = "BUY")
     {
         try {
+            echo 1212;
             $fund = Fund::where('code', '=', $fundCode)->first();
-
+            
             $vendorConfig = Config('vendor');
             $tradeUrl = $vendorConfig['trade_url'];
             $options = [
@@ -353,7 +362,8 @@ class BankService extends VendorService
             ];
 
             $tradeResponse = $this->post($tradeUrl, $options);
-
+            logger("123");
+            logger($tradeResponse);
             return $tradeResponse->id;
         } catch (\Throwable $th) {
             if ($matchedDate < 6) {

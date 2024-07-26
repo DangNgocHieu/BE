@@ -18,9 +18,10 @@ if (!function_exists('getRandomString')) {
      *
      * @param  number  $length
      */
+    //create code transfer money
     function getRandomString($length = 16, $salt = '')
     {
-        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' . $salt, ceil($length / strlen($x)))), 1, $length);
+        return substr(str_shuffle(str_repeat($x = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' . $salt, ceil($length / strlen($x)))), 1, $length);
     }
 }
 

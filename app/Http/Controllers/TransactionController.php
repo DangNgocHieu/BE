@@ -223,19 +223,18 @@ class TransactionController extends Controller
     }
 
     public function withdraw(WithdrawRequest $request)
-    {
+    {   
         try {
+           
             DB::beginTransaction();
 
             $request->session()->remove('auth.password_confirmed_at');
-
             $userId = Auth::id();
             $userPackage = UserPackage::where([
                 'user_id' => $userId,
                 'package_id' => $request->id
-            ])->firstOrFail();
-
-            $isValid = $this->bank->getBankAccountInfo($request->bank_id, $request->bank_account_id, true);
+                ])->firstOrFail();
+                $isValid = $this->bank->getBankAccountInfo($request->bank_id, $request->bank_account_id, true);
 
             if ($isValid !== true) {
                 return $isValid;
@@ -255,7 +254,6 @@ class TransactionController extends Controller
             foreach ($userPackage->package->funds as $index => $fund) {
                 $percentage = $fund->pivot->allocation_percentage;
                 $amount = $request->amount * $percentage / 100;
-
                 $userAsset = UserAsset::firstOrCreate([
                     'user_package_id' => $userPackage->id,
                     'fund_id' => $fund->id,
@@ -269,7 +267,6 @@ class TransactionController extends Controller
                         ['id', '<>', $transaction->id]
                     ]
                 )->sum('amount');
-
                 $balance += $userAsset->amount * $userAsset->fund->current_value;
 
                 $newFundTransaction = [

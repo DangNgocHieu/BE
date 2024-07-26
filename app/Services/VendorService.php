@@ -76,17 +76,18 @@ class VendorService extends BaseService
         $currentTimeStamp = Carbon::now()->timestamp;
 
         if ($expiredAt < $currentTimeStamp || $forceUpdate) {
-            $credential->expired_at = Carbon::now()->addHour(8)->timestamp;
-            $config = Config('vendor');
-            $options = [
-                'body' => json_encode([
-                    'username' => $config['username'],
-                    'password' => $config['password'],
-                ])
-            ];
-            $response = $this->post($config['login_url'], $options);
-            $credential->token = $response->token;
-            $credential->save();
+            // $credential->expired_at = Carbon::now()->addHour(8)->timestamp;
+            // $config = Config('vendor');
+            // $options = [
+            //     'body' => json_encode([
+            //         'username' => $config['username'],
+            //         'password' => $config['password'],
+            //     ])
+            // ];
+            // $response = $this->post($config['login_url'], $options);
+           
+            // $credential->token = $response->token;
+            // $credential->save();
         }
 
         return $credential->token;

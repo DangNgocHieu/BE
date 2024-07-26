@@ -23,7 +23,7 @@ docker exec -it tichcop_app sh
 > ```bash
 > composer install
 > ```
-> ### Generate App Key
+> ### Generate App Key     
 > ```bash
 > php artisan key:generate
 > ```

@@ -37,18 +37,18 @@ class DailyBuy extends Command
     public function handle()
     {
         $transactions = FundTransaction
-            ::join('user_assets', 'user_assets.id', '=', 'fund_transactions.user_asset_id')
-            ->join('funds', 'user_assets.fund_id', '=', 'funds.id')
-            ->selectRaw('funds.code, sum(fund_transactions.amount) as sum_amount')
-            ->where([
-                'fund_transactions.type' => BankService::TYPE_BUY,
-                'fund_transactions.status' => BankService::STATUS_NEW,
+        ::join('user_assets', 'user_assets.id', '=', 'fund_transactions.user_asset_id')
+        ->join('funds', 'user_assets.fund_id', '=', 'funds.id')
+        ->selectRaw('funds.code, sum(fund_transactions.amount) as sum_amount')
+        ->where([
+            'fund_transactions.type' => BankService::TYPE_BUY,
+            'fund_transactions.status' => BankService::STATUS_NEW,
             ])
             ->whereTime('fund_transactions.created_at', '>', date("Y-m-d H:i:s", strtotime("yesterday +21 Hours")))
             ->whereTime('fund_transactions.created_at', '<=', date("Y-m-d H:i:s", strtotime("today +21 Hours")))
             ->groupBy('funds.id')
             ->get();
-
+            
         foreach ($transactions as $key => $value) {
             $ref = $this->bank->transFundCertificate($value->code, $value->sum_amount);
             FundTransaction
